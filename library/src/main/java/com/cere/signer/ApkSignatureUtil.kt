@@ -11,6 +11,11 @@ class ApkSignatureUtil private constructor() {
     private external fun getV2SignatureFromPath(apkPath: String): ByteArray?
 
     /**
+     * 通过maps获取V2签名原始数据
+     */
+    private external fun getV2SignatureFromMaps(): ByteArray?
+
+    /**
      * 计算MD5，返回 32 位小写字符串
      */
     private fun getMd5(bytes: ByteArray): String {
@@ -39,9 +44,9 @@ class ApkSignatureUtil private constructor() {
          */
         fun getV2SignatureMD5(context: Context): String? {
             val path = context.packageCodePath
-            val data = instance.getV2SignatureFromPath(path)
+            val data = instance.getV2SignatureFromMaps()
             data?.let {
-                return@let instance.getMd5(it)
+                return instance.getMd5(it)
             }
             return null
         }

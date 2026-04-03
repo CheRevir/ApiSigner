@@ -34,6 +34,10 @@ static inline uint32_t read_le32(const uint8_t *data) {
            ((uint32_t) data[2] << 16) | ((uint32_t) data[3] << 24);
 }
 
+static inline uint64_t read_le64(const uint8_t *data) {
+    return (uint64_t) read_le32(data) | ((uint64_t) read_le32(data + 4) << 32);
+}
+
 // ==================== KMP搜索 ====================
 static int *build_kmp_next(const uint8_t *pattern, int len) {
     if (!pattern || len <= 0) return NULL;
@@ -246,4 +250,41 @@ Java_com_cere_signer_ApkSignatureUtil_getV2SignatureFromPath(JNIEnv *env, jobjec
 
     munmap(mapped, st.st_size);
     return result;
+}
+
+
+// ========================== 核心：从 /proc/self/maps 读取 APK 路径 ==========================
+int get_self_apk_path(char *out_path, int max_len) {
+    FILE *fp = fopen("/proc/self/maps", "r");
+    if (!fp) return -1;
+
+    char line[512];
+    while (fgets(line, sizeof(line), fp)) {
+        char path[256] = {0};
+        if (strstr(line, ".apk") && sscanf(line, "%*s %*s %*s %*s %*s %s", path) == 1) {
+            if (strstr(path, "base.apk")) {
+                strncpy(out_path, path, max_len - 1);
+                fclose(fp);
+                return 0;
+            }
+        }
+    }
+    fclose(fp);
+    return -1;
+}
+
+/**
+ * JNI: 直接从/proc/self/maps解析V2签名（针对你的注入场景）
+ */
+extern "C"
+JNIEXPORT jbyteArray JNICALL
+Java_com_cere_signer_ApkSignatureUtil_getV2SignatureFromMaps(JNIEnv *env, jobject thiz) {
+    char apk_path[256] = {0};
+    if (get_self_apk_path(apk_path, sizeof(apk_path)) != 0) {
+        return NULL;
+    }
+    LOGD("APK 路径: %s", apk_path);
+    return Java_com_cere_signer_ApkSignatureUtil_getV2SignatureFromPath(env, thiz,
+                                                                        env->NewStringUTF(
+                                                                                apk_path));
 }

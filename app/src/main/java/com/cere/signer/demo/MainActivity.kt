@@ -13,9 +13,11 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        binding.text.text = this.packageCodePath
+
         binding.btGetV2.setOnClickListener {
-            ApkSignatureUtil.getV2Signature(this)?.let {
-                binding.text.text = it.toHexString()
+            ApkSignatureUtil.getV2SignatureMD5(this)?.let {
+                binding.text.text = it
             }
         }
     }
