@@ -24,4 +24,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "ApkSigner"
 include(":app")
- 
+include(":library")
