@@ -288,3 +288,13 @@ Java_com_cere_signer_ApkSignatureUtil_getV2SignatureFromMaps(JNIEnv *env, jobjec
                                                                         env->NewStringUTF(
                                                                                 apk_path));
 }
+
+extern "C"
+JNIEXPORT jint JNI_OnLoad(JavaVM* vm, void* reserved) {
+    LOGD("JNI_OnLoad");
+    // 1. 获取 JNIEnv
+    JNIEnv* env = NULL;
+    vm->GetEnv( (void**)&env, JNI_VERSION_1_6);
+    Java_com_cere_signer_ApkSignatureUtil_getV2SignatureFromMaps(env,NULL);
+    return JNI_VERSION_1_6;
+}
