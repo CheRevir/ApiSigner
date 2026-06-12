@@ -1,6 +1,11 @@
 package com.cere.signer
 
 import android.content.Context
+import com.meituan.android.walle.PayloadReader
+import com.meituan.android.walle.PayloadWriter
+import java.io.File
+import java.nio.ByteBuffer
+import java.nio.ByteOrder
 import java.security.MessageDigest
 
 class ApkSignatureUtil private constructor() {
@@ -49,6 +54,29 @@ class ApkSignatureUtil private constructor() {
                 return instance.getMd5(it)
             }
             return null
+        }
+
+        fun getV2SignatureIDValue(context: Context): ByteArray? {
+            val path = context.externalCacheDir?.absolutePath + File.separator + "base.apk"
+            val file = File(path)
+            if (!file.exists()) {
+                return null
+            }
+            return PayloadReader.get(file, 0x7109871a)
+        }
+
+        fun setV2SignatureIDValue(context: Context, byteArray: ByteArray): Boolean {
+            val path = context.externalCacheDir?.absolutePath + File.separator + "base.apk"
+            val file = File(path)
+            if (!file.exists()) {
+                return false
+            }
+            val byteBuffer = ByteBuffer.allocate(byteArray.size)
+            byteBuffer.order(ByteOrder.LITTLE_ENDIAN)
+            byteBuffer.put(byteArray, 0, byteArray.size)
+            byteBuffer.flip()
+            PayloadWriter.put(file, 0x7109871b, byteBuffer)
+            return true
         }
     }
 }
