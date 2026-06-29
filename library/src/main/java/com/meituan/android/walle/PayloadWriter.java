@@ -21,23 +21,20 @@ public final class PayloadWriter {
 
     /**
      * put (id, String) into apk, update if id exists
-     *
      * @param apkFile apk file
-     * @param id      id
-     * @param string  string content
+     * @param id id
+     * @param string string content
      * @throws IOException
      * @throws SignatureNotFoundException
      */
     public static void put(final File apkFile, final int id, final String string) throws IOException, SignatureNotFoundException {
         put(apkFile, id, string, false);
     }
-
     /**
      * put (id, String) into apk, update if id exists
-     *
-     * @param apkFile   apk file
-     * @param id        id
-     * @param string    string
+     * @param apkFile apk file
+     * @param id id
+     * @param string string
      * @param lowMemory if need low memory operation, maybe a little slower
      * @throws IOException
      * @throws SignatureNotFoundException
@@ -50,7 +47,6 @@ public final class PayloadWriter {
         byteBuffer.flip();
         put(apkFile, id, byteBuffer, lowMemory);
     }
-
     /**
      * put (id, buffer) into apk, update if id exists
      *
@@ -66,10 +62,9 @@ public final class PayloadWriter {
 
     /**
      * put (id, buffer) into apk, update if id exists
-     *
-     * @param apkFile   apk file
-     * @param id        id
-     * @param buffer    buffer
+     * @param apkFile apk file
+     * @param id id
+     * @param buffer buffer
      * @param lowMemory if need low memory operation, maybe a little slower
      * @throws IOException
      * @throws SignatureNotFoundException
@@ -79,7 +74,6 @@ public final class PayloadWriter {
         idValues.put(id, buffer);
         putAll(apkFile, idValues, lowMemory);
     }
-
     /**
      * put new idValues into apk, update if id exists
      *
@@ -91,12 +85,11 @@ public final class PayloadWriter {
     public static void putAll(final File apkFile, final Map<Integer, ByteBuffer> idValues) throws IOException, SignatureNotFoundException {
         putAll(apkFile, idValues, false);
     }
-
     /**
      * put new idValues into apk, update if id exists
      *
-     * @param apkFile   apk file
-     * @param idValues  id value. NOTE: use unknown IDs. DO NOT use ID that have already been used.  See <a href='https://source.android.com/security/apksigning/v2.html'>APK Signature Scheme v2</a>
+     * @param apkFile  apk file
+     * @param idValues id value. NOTE: use unknown IDs. DO NOT use ID that have already been used.  See <a href='https://source.android.com/security/apksigning/v2.html'>APK Signature Scheme v2</a>
      * @param lowMemory if need low memory operation, maybe a little slower
      * @throws IOException
      * @throws SignatureNotFoundException
@@ -118,25 +111,23 @@ public final class PayloadWriter {
             }
         }, lowMemory);
     }
-
     /**
      * remove content by id
      *
      * @param apkFile apk file
-     * @param id      id
+     * @param id id
      * @throws IOException
      * @throws SignatureNotFoundException
      */
     public static void remove(final File apkFile, final int id) throws IOException, SignatureNotFoundException {
         remove(apkFile, id, false);
     }
-
     /**
      * remove content by id
      *
-     * @param apkFile   apk file
-     * @param id        id
-     * @param lowMemory if need low memory operation, maybe a little slower
+     * @param apkFile apk file
+     * @param id id
+     * @param lowMemory  if need low memory operation, maybe a little slower
      * @throws IOException
      * @throws SignatureNotFoundException
      */
@@ -208,8 +199,8 @@ public final class PayloadWriter {
                     if (padding < 0) {
                         padding += ApkUtil.ANDROID_COMMON_PAGE_ALIGNMENT_BYTES;
                     }
-                    final ByteBuffer dummy = ByteBuffer.allocate(padding).order(ByteOrder.LITTLE_ENDIAN);
-                    apkSigningBlock.addPayload(new ApkSigningPayload(ApkUtil.VERITY_PADDING_BLOCK_ID, dummy));
+                    final ByteBuffer dummy =  ByteBuffer.allocate(padding).order(ByteOrder.LITTLE_ENDIAN);
+                    apkSigningBlock.addPayload(new ApkSigningPayload(ApkUtil.VERITY_PADDING_BLOCK_ID,dummy));
                 }
             }
 
@@ -229,7 +220,7 @@ public final class PayloadWriter {
                         final byte[] buffer = new byte[1024];
 
                         int len;
-                        while ((len = fIn.read(buffer)) > 0) {
+                        while ((len = fIn.read(buffer)) > 0){
                             outStream.write(buffer, 0, len);
                         }
                     } finally {
@@ -254,7 +245,7 @@ public final class PayloadWriter {
                         final byte[] buffer = new byte[1024];
 
                         int len;
-                        while ((len = inputStream.read(buffer)) > 0) {
+                        while ((len = inputStream.read(buffer)) > 0){
                             fIn.write(buffer, 0, len);
                         }
                     } finally {
