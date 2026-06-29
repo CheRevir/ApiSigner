@@ -1,6 +1,6 @@
 package com.cere.signer.demo.ui
 
-import androidx.annotation.StringRes
+import androidx.compose.foundation.layout.Column
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.Search
@@ -15,16 +15,24 @@ import com.cere.signer.demo.ui.theme.AppTheme
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TopAppBar(
-    @StringRes titleRes: Int,
+    title: String,
     navigationIcon: ImageVector,
     actionIcon: ImageVector,
     modifier: Modifier = Modifier,
+    subTile: String? = null,
     colors: TopAppBarColors = TopAppBarDefaults.topAppBarColors(),
     onNavigationClick: () -> Unit = {},
     onActionClick: () -> Unit = {}
 ) {
     CenterAlignedTopAppBar(
-        title = { Text(stringResource(titleRes)) },
+        title = {
+            Column() {
+                Text(title)
+                if (subTile?.isNotEmpty() == true) {
+                    Text(subTile)
+                }
+            }
+        },
         navigationIcon = {
             IconButton(onClick = onNavigationClick) {
                 Icon(
@@ -53,7 +61,7 @@ fun TopAppBar(
 private fun TopAppBarPreview() {
     AppTheme {
         TopAppBar(
-            titleRes = android.R.string.untitled,
+            title = stringResource(android.R.string.untitled),
             navigationIcon = Icons.Rounded.Search,
             actionIcon = Icons.Rounded.Add,
         )

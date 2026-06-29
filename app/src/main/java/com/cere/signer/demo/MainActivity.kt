@@ -1,5 +1,6 @@
 package com.cere.signer.demo
 
+import android.R.attr.navigationIcon
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.SystemBarStyle
@@ -10,20 +11,27 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.tooling.preview.PreviewScreenSizes
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.cere.signer.demo.model.FileNode
+import com.cere.signer.demo.model.FileNodeState
 import com.cere.signer.demo.ui.TopAppBar
 import com.cere.signer.demo.ui.theme.AppTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     private val viewModel: MainViewModel by viewModels()
 
@@ -65,9 +73,11 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-@PreviewScreenSizes
 @Composable
-fun Home() {
+fun Home(viewModel: MainViewModel = hiltViewModel()) {
+    val title by viewModel.currentPath.collectAsStateWithLifecycle()
+    val node by viewModel.fileState.collectAsStateWithLifecycle()
+
     Scaffold(
         containerColor = Color.Transparent,
         contentColor = MaterialTheme.colorScheme.onBackground,
@@ -80,10 +90,13 @@ fun Home() {
                 .padding(innerPadding)
         ) {
             TopAppBar(
-                titleRes = R.string.app_name,
+                title = title,
+                subTile = if (node is FileNodeState.Success) (node as FileNodeState.Success).file.count.toString() else null,
                 navigationIcon = Icons.Rounded.Search,
                 actionIcon = Icons.Rounded.Add,
             )
+
+            LazyColumn() { }
         }
     }
 }

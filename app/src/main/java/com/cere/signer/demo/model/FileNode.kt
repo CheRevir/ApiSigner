@@ -3,19 +3,13 @@ package com.cere.signer.demo.model
 import java.io.File
 
 data class FileNode(val path: String) {
-    private val file: File by lazy { File(path) }
+    val file: File by lazy(LazyThreadSafetyMode.SYNCHRONIZED) { File(path) }
 
-    fun hasParent(): Boolean {
-        return file.parent != null
-    }
+    val hasParent = file.parent != null
 
-    fun getFile(): File {
-        return this.file
-    }
+    val parent: FileNode? = file.parent?.let { FileNode(it) }
 
-    fun getParent(): FileNode? = file.parent?.let { FileNode(it) }
-        
-    fun getList(): List<FileNode>? {
-        return file.list()?.map { FileNode(it) }
-    }
+    val lists: List<FileNode>? = file.list()?.map { FileNode(it) }
+
+    val count = lists?.count() ?: 0
 }
