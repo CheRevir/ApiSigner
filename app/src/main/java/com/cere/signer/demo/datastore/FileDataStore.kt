@@ -7,6 +7,7 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
+import java.io.File
 import javax.inject.Inject
 
 class FileDataStore @Inject constructor(
@@ -14,6 +15,16 @@ class FileDataStore @Inject constructor(
 ) {
 
     fun getFile(path: String): Flow<FileNode> = flow {
-        emit(FileNode(path))
+        val file = File(path)
+        emit(FileNode.fromFile(file))
+    }.flowOn(ioDispatcher)
+
+    fun getFileChild(path: String): Flow<List<FileNode>> = flow {
+        val file = File(path)
+        if (file.isFile) {
+            emit(listOf())
+        } else {
+            emit(file.listFiles()?.map { FileNode.fromFile(it) } ?: listOf())
+        }
     }.flowOn(ioDispatcher)
 }

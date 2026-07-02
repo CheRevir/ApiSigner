@@ -55,6 +55,7 @@ android {
 }
 
 dependencies {
+    implementation(libs.accompanist.permissions)
     implementation(libs.androidx.activity.compose)
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.compose.material.iconsExtended)

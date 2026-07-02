@@ -15,8 +15,8 @@ class UserSettingDataStore @Inject constructor(private val dataStore: DataStore<
 
     suspend fun setCurrentPath(path: String) {
         dataStore.updateData {
-            it.toMutablePreferences().also {
-                it[stringPreferencesKey(KEY_CURRENT_PATH)] = path
+            it.toMutablePreferences().also {preferences ->
+                preferences[stringPreferencesKey(KEY_CURRENT_PATH)] = path
             }
         }
     }

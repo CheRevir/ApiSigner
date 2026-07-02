@@ -1,6 +1,7 @@
 package com.cere.signer.demo.ui
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.Search
@@ -9,6 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import com.cere.signer.demo.ui.theme.AppTheme
 
@@ -26,8 +28,8 @@ fun TopAppBar(
 ) {
     CenterAlignedTopAppBar(
         title = {
-            Column() {
-                Text(title)
+            Column(modifier = Modifier.fillMaxWidth()) {
+                Text(title, maxLines = 1, overflow = TextOverflow.StartEllipsis)
                 if (subTile?.isNotEmpty() == true) {
                     Text(subTile)
                 }
