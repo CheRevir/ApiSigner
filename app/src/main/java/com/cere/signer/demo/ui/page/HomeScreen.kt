@@ -99,7 +99,7 @@ internal fun HomeScreen(
                         }
 
                         items(
-                            fileUiState.data.count,
+                            fileUiState.lists.count(),
                             key = {
                                 fileUiState.lists[it].path
                             },

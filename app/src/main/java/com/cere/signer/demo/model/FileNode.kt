@@ -4,7 +4,7 @@ sealed class FileNode private constructor(
     open val parent: String,
     open val child: String,
     open val type: FileType,
-) : Comparator<FileNode> {
+) : Comparable<FileNode> {
     val path: String
         get() {
             if (child.isEmpty()) {
@@ -21,14 +21,14 @@ sealed class FileNode private constructor(
             return child
         }
 
-    override fun compare(o1: FileNode, o2: FileNode): Int {
-        if (o1.isDirectory && !o2.isDirectory) {
-            return 1
-        }
-        if (!o1.isDirectory && o2.isDirectory) {
+    override fun compareTo(other: FileNode): Int {
+        if (this.isDirectory && !other.isDirectory) {
             return -1
         }
-        return o1.name.compareTo(o2.name)
+        if (!this.isDirectory && other.isDirectory) {
+            return 1
+        }
+        return this.name.compareTo(other.name)
     }
 
     data class File(

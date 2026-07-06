@@ -21,19 +21,14 @@ import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.cere.signer.demo.R
 import com.cere.signer.demo.model.FileNode
 import com.cere.signer.demo.ui.theme.AppTheme
+import com.cere.signer.demo.util.getIcon
 
 @Composable
 fun FileItem(file: FileNode, onClick: () -> Unit = {}) {
     val title: String by remember { mutableStateOf(file.name) }
-    FileItem(
-        painterResource(
-            R
-                .drawable.ic_folder
-        ), title, onClick = onClick
-    )
+    FileItem(painterResource(file.getIcon()), title, onClick = onClick)
 }
 
 @Composable

@@ -24,7 +24,7 @@ class FileDataStore @Inject constructor(
         if (file.isFile) {
             emit(listOf())
         } else {
-            emit(file.listFiles()?.map { FileNode.fromFile(it) } ?: listOf())
+            emit(file.listFiles()?.map { FileNode.fromFile(it) }?.sorted() ?: listOf())
         }
     }.flowOn(ioDispatcher)
 }
