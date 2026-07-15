@@ -72,7 +72,7 @@ public final class PayloadReader {
      * @param apkFile apk file
      * @return all custom (id, buffer)
      */
-    private static Map<Integer, ByteBuffer> getAll(final File apkFile) {
+    public static Map<Integer, ByteBuffer> getAll(final File apkFile) {
         Map<Integer, ByteBuffer> idValues = null;
         try {
             RandomAccessFile randomAccessFile = null;

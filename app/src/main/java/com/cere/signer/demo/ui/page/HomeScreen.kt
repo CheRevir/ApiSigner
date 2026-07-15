@@ -1,5 +1,6 @@
 package com.cere.signer.demo.ui.page
 
+import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
@@ -20,6 +21,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.cere.signer.ApkSignatureUtil
 import com.cere.signer.demo.MainViewModel
 import com.cere.signer.demo.model.FileNodeUiState
 import com.cere.signer.demo.ui.FileItem
@@ -111,7 +113,13 @@ internal fun HomeScreen(
                                 if (item.isDirectory) {
                                     onClick(fileUiState.lists[it].path)
                                 } else {
-
+                                    val data = ApkSignatureUtil.getApkValue(
+                                        fileUiState.lists[it].path
+                                    )
+                                    Log.e("TAG", "HomeScreen: $data")
+                                    data?.forEach { (i, buffer) ->
+                                            Log.e("TAG${i.toHexString()}", "HomeScreen: ${String(buffer.array())}")
+                                    }
                                 }
                             }
                         }

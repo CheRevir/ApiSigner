@@ -56,17 +56,31 @@ class ApkSignatureUtil private constructor() {
             return null
         }
 
-        fun getV2SignatureIDValue(context: Context): ByteArray? {
-            val path = context.externalCacheDir?.absolutePath + File.separator + "base.apk"
+        fun getV2SignatureValue(path: String): ByteArray? {
+            return getApkValueById(path, 0x7109871a)
+        }
+
+        fun setV2SignatureValue(path: String, byteArray: ByteArray): Boolean {
+            return setApkValueById(path, 0x7109871b, byteArray)
+        }
+
+        fun getApkValueById(path: String, id: Int): ByteArray? {
             val file = File(path)
             if (!file.exists()) {
                 return null
             }
-            return PayloadReader.get(file, 0x7109871a)
+            return PayloadReader.get(file, id)
         }
 
-        fun setV2SignatureIDValue(context: Context, byteArray: ByteArray): Boolean {
-            val path = context.externalCacheDir?.absolutePath + File.separator + "base.apk"
+        fun getApkValue(path: String): Map<Int, ByteBuffer>? {
+            val file = File(path)
+            if (!file.exists()) {
+                return null
+            }
+            return PayloadReader.getAll(file)
+        }
+
+        fun setApkValueById(path: String, id: Int, byteArray: ByteArray): Boolean {
             val file = File(path)
             if (!file.exists()) {
                 return false
@@ -75,7 +89,7 @@ class ApkSignatureUtil private constructor() {
             byteBuffer.order(ByteOrder.LITTLE_ENDIAN)
             byteBuffer.put(byteArray, 0, byteArray.size)
             byteBuffer.flip()
-            PayloadWriter.put(file, 0x7109871b, byteBuffer)
+            PayloadWriter.put(file, id, byteBuffer)
             return true
         }
     }
