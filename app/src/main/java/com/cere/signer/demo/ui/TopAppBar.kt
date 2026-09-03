@@ -3,8 +3,6 @@ package com.cere.signer.demo.ui
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Add
-import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -18,41 +16,35 @@ import com.cere.signer.demo.ui.theme.AppTheme
 @Composable
 fun TopAppBar(
     title: String,
-    navigationIcon: ImageVector,
-    actionIcon: ImageVector,
+    navigationIcon: ImageVector? = null,
     modifier: Modifier = Modifier,
     subTile: String? = null,
     colors: TopAppBarColors = TopAppBarDefaults.topAppBarColors(),
     onNavigationClick: () -> Unit = {},
-    onActionClick: () -> Unit = {}
 ) {
     CenterAlignedTopAppBar(
         title = {
             Column(modifier = Modifier.fillMaxWidth()) {
-                Text(title, maxLines = 1, overflow = TextOverflow.StartEllipsis)
+                Text(title, maxLines = 1, overflow = TextOverflow.Ellipsis)
                 if (subTile?.isNotEmpty() == true) {
-                    Text(subTile)
+                    Text(
+                        text = subTile,
+                        maxLines = 1,
+                        overflow = TextOverflow.StartEllipsis,
+                        style = MaterialTheme.typography.bodySmall,
+                    )
                 }
             }
         },
-        navigationIcon = {
+        navigationIcon = navigationIcon?.let { icon -> {
             IconButton(onClick = onNavigationClick) {
                 Icon(
-                    imageVector = navigationIcon,
+                    imageVector = icon,
                     contentDescription = null,
                     tint = colors.navigationIconContentColor
                 )
             }
-        },
-        actions = {
-            IconButton(onClick = onActionClick) {
-                Icon(
-                    imageVector = actionIcon,
-                    contentDescription = null,
-                    tint = colors.actionIconContentColor
-                )
-            }
-        },
+        } } ?: {},
         colors = colors,
         modifier = modifier
     )
@@ -64,8 +56,6 @@ private fun TopAppBarPreview() {
     AppTheme {
         TopAppBar(
             title = stringResource(android.R.string.untitled),
-            navigationIcon = Icons.Rounded.Search,
-            actionIcon = Icons.Rounded.Add,
         )
     }
 }

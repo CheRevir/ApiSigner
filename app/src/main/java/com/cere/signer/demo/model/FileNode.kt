@@ -59,7 +59,12 @@ sealed class FileNode private constructor(
                     file.list()?.count() ?: 0
                 )
             }
-            return File(parent, child, FileType.UNKNOW)
+            val type = if (file.extension.equals("apk", ignoreCase = true)) {
+                FileType.APK
+            } else {
+                FileType.UNKNOW
+            }
+            return File(parent, child, type)
         }
     }
 }
